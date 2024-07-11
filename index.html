@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Test Bullets</title>
+  <style>
+    /* Bullet styling */
+    .bullet {
+      position: absolute;
+      width: 3px;
+      height: 7px;
+      background-color: red;
+      border: 1px solid yellow; /* Add border for visibility */
+      border-radius: 2px;
+      pointer-events: none; /* Allow clicks to pass through */
+      animation: shoot 1s linear;
+    }
+
+    /* Shooting animation */
+    @keyframes shoot {
+      from {
+        transform: translateY(0);
+      }
+      to {
+        transform: translateY(-100vh);
+      }
+    }
+  </style>
+</head>
+<body>
+  <section id="about" style="height: 100vh; background-color: black;">
+    Click here to shoot bullets
+  </section>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      console.log('DOM fully loaded again and parsed');
+      const aboutSection = document.getElementById('about');
+
+      if (aboutSection) {
+        console.log('About section found');
+        aboutSection.addEventListener('click', (event) => {
+          try {
+            shootBullet(event);
+          } catch (error) {
+            console.error('Error shooting bullet:', error);
+          }
+        });
+      } else {
+        console.error('About section not found');
+      }
+
+      function shootBullet(event) {
+        try {
+          const x = event.clientX;
+          const y = event.clientY;
+          console.log(`Shooting bullet at (${x}, ${y})`);
+          const bullet = document.createElement('div');
+          bullet.className = 'bullet';
+          bullet.style.left = `${x}px`;
+          bullet.style.top = `${y}px`;
+          bullet.style.position = 'absolute'; // Ensure the bullet is positioned absolutely
+          document.body.appendChild(bullet);
+
+          // Remove the bullet after the animation ends
+          bullet.addEventListener('animationend', () => {
+            bullet.remove();
+          });
+        } catch (error) {
+          console.error('Error creating or animating bullet:', error);
+        }
+      }
+    });
+  </script>
+</body>
+</html>
